@@ -1,0 +1,3 @@
+SELECT 'DATABASE::Files size' AS METRIC, sum(bytes) as VALUE FROM dba_data_files
+UNION
+SELECT 'DATABASE::Data size' AS METRIC, sum(bytes) as VALUE FROM dba_segments

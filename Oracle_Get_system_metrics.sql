@@ -57,4 +57,10 @@ UNION
 FROM dba_users u WHERE username = UPPER('{$ORACLE.USER}')
 UNION
 select 'ASH::' || Decode(Session_State, 'ON CPU', 'CPU', 'User I/O', 'User I/O', 'Waiting') as Metric, Round(count(*) / 60, 1) as Value
-  from V$active_Session_History where Sample_Time > (SYSDATE - INTERVAL '1' Minute) group by Session_State;
+  from V$active_Session_History where Sample_Time > (SYSDATE - INTERVAL '1' Minute) group by Session_State
+UNION
+select 'OBJECT::Invalid count', count(*) from dba_objects where status='INVALID'
+UNION
+select 'INDEX::Nonpartitioned unusable count', count(*) from dba_indexes where status = 'UNUSABLE'
+UNION
+select 'INDEX::Partitioned unusable count', count(*) from dba_ind_partitions where status = 'UNUSABLE';
